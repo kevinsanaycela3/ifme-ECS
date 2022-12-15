@@ -8,8 +8,8 @@ pipeline {
         steps {
           
           sh '''#!/bin/bash
-          docker context use default
-          docker context ls
+          sudo docker context use default
+          sudo docker context ls
           
           '''
           
@@ -22,7 +22,7 @@ pipeline {
                            ]) {
           sh '''#!/bin/bash
           sudo docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
-          sudo docker push kingmant/ifmeorg
+          sudo docker push kos44/kura_apps
           '''
           }
         }
@@ -30,8 +30,8 @@ pipeline {
       stage ('Change Context'){
         steps {
           sh '''#!/bin/bash
-          docker context use myecscontext
-          docker context ls
+          sudo docker context use myecscontext
+          sudo docker context ls
           '''
         }
       }
@@ -48,8 +48,8 @@ pipeline {
         steps {
          
           sh '''#!/bin/bash
-          docker context use default
-          sudo docker image rm kingmant/ifmeorg:latest
+          sudo docker context use default
+          sudo docker image rm kos44/kura_apps
           '''
           
         }
