@@ -8,6 +8,7 @@ pipeline {
         steps {
           
           sh '''#!/bin/bash
+          sudo docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
           sudo docker context use default
           sudo docker context ls
           
