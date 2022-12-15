@@ -8,9 +8,7 @@ pipeline {
         steps {
           
           sh '''#!/bin/bash
-          cd
-          echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin
-          sudo docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
+          echo $dockerhub_PSW | sudo docker login -u $dockerhub_USR --password-stdin
           sudo docker context use default
           sudo docker context ls
           
@@ -24,7 +22,7 @@ pipeline {
                            string(credentialsId: $dockerhub_PSW, variable: 'dockerhub_passwd')
                            ]) {
           sh '''#!/bin/bash
-          sudo docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
+          
           sudo docker push kos44/kura_apps
           '''
           }
