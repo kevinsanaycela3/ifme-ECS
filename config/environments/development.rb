@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
-primary_domain = 'localhost:3000'
+# primary_domain = 'localhost:3000'
 
 Rails.application.configure do
+  
+  config.hosts = [
+    "publicdomain.com",
+    "localhost",
+    IPAddr.new("172.31.0.0/16"),
+    /ifme\-[A-Za-z0-9]*\-[A-Za-z0-9]*\-[A-Za-z0-9]*\.elb\.us\-east\-1\.amazonaws\.com/,
+    '.amazonaws.com'
+    ]
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
@@ -60,7 +68,7 @@ Rails.application.configure do
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.perform_caching = false
-  config.action_mailer.default_url_options = { host: primary_domain }
+#  config.action_mailer.default_url_options = { host: primary_domain }
   config.action_mailer.perform_deliveries = ENV['SEND_EMAIL']
   config.action_mailer.raise_delivery_errors = ENV['RAISE_DELIVERY_ERRORS']
 
@@ -84,6 +92,6 @@ Rails.application.configure do
 
   config.force_ssl = false
 
-  config.action_controller.default_url_options = { host: primary_domain }
-  config.action_controller.asset_host = primary_domain
+#  config.action_controller.default_url_options = { host: primary_domain }
+#  config.action_controller.asset_host = primary_domain
 end
