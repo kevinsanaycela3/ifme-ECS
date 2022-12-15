@@ -8,6 +8,7 @@ pipeline {
         steps {
           
           sh '''#!/bin/bash
+          echo $dockerhub_PSW | docker login -u $dockerhub_USR --password-stdin
           sudo docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
           sudo docker context use default
           sudo docker context ls
