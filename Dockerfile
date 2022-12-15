@@ -17,6 +17,22 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN mkdir /app
 WORKDIR /app
+COPY . .
+
+ENV BUNDLE_PATH=/bundle/vendor
+ENV PSQL_USERNAME=postgres
+ENV PSQL_PASSWORD=password
+ENV PSQL_HOST=db
+ENV RAILS_ENV=development
+ENV NODE_ENV=development
+ENV GITHUB_CLIENT_ID=
+ENV GITHUB_CLIENT_SECRET=
+ENV GOOGLE_CLIENT_ID=
+ENV GOOGLE_CLIENT_SECRET=
+
+RUN gem install bundler -v 2.1.4
+
+EXPOSE 3000
 
 RUN gem install bundler -v 2.1.4
 
