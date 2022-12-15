@@ -16,7 +16,7 @@ pipeline {
         steps {
           withCredentials([string(credentialsId: 'DOCKERHUB_UNAME', variable: 'dockerhub_uname'),
                            string(credentialsId: 'DOCKERHUB_PASSWD', variable: 'dockerhub_passwd'),
-                           string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins']) {
+                           string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
           echo "${sudo_jenkins}" | sudo -S docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
           echo "${sudo_jenkins}" | sudo -S docker push kingmant/ifmeorg
