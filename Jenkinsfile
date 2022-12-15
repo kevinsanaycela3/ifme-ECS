@@ -7,7 +7,7 @@ pipeline {
           sh '''#!/bin/bash
           docker context use default
           docker context ls
-          echo "${sudo_jenkins}" | sudo -S docker-compose build
+          echo ${sudo_jenkins} | sudo -S docker-compose build
           '''
           }
         }
@@ -18,8 +18,8 @@ pipeline {
                            string(credentialsId: 'DOCKERHUB_PASSWD', variable: 'dockerhub_passwd'),
                            string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
-          echo "${sudo_jenkins}" | sudo -S docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
-          echo "${sudo_jenkins}" | sudo -S docker push kingmant/ifmeorg
+          echo ${sudo_jenkins} | sudo -S docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
+          echo ${sudo_jenkins} | sudo -S docker push kingmant/ifmeorg
           '''
           }
         }
@@ -36,7 +36,7 @@ pipeline {
         steps {
           withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
-          echo "${sudo_jenkins}" | sudo -S docker compose up -d
+          echo ${sudo_jenkins} | sudo -S docker compose up -d
           '''
           }
         }
@@ -46,7 +46,7 @@ pipeline {
           withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
           docker context use default
-          echo "${sudo_jenkins}" | sudo -S docker image rm kingmant/ifmeorg:latest
+          echo ${sudo_jenkins} | sudo -S docker image rm kingmant/ifmeorg:latest
           '''
           }
         }
