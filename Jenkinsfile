@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  environment {
+    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+  }
     stages {
       stage ('Build Image'){
         steps {
@@ -15,13 +18,13 @@ pipeline {
       
       stage ('Push Image'){
         steps {
-          withCredentials([string(credentialsId: 'DOCKERHUB_UNAME', variable: 'dockerhub_uname'),
-                            string(credentialsId: 'DOCKERHUB_PASSWD', variable: 'dockerhub_passwd'),
+          withCredentials([string(credentialsId: 'DOCKERHUB_USR', variable: 'dockerhub_uname'),
+                            string(credentialsId: 'DOCKERHUB_PSW', variable: 'dockerhub_passwd'),
                                string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
-          echo "Does it get to this step?"
-          # echo ${sudo_jenkins} | sudo -S docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
-          echo ${sudo_jenkins} | sudo -S docker push kingmant/ifmeorg
+          
+          echo $dockerhub_PSW | sudo docker login -u $dockerhub_USR --password-stdin
+          echo ${sudo_jenkins} | sudo -S docker push kos44/kura_apps
           '''
           }
         }
