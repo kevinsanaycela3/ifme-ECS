@@ -1,58 +1,59 @@
 pipeline {
   agent any
-  environment {
-    dockerhub = credentials('dockerhub')
-  } 
     stages {
       stage ('Build Image'){
         steps {
-          
+          withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
-          echo $dockerhub_PSW | sudo docker login -u $dockerhub_USR --password-stdin
-          sudo docker context use default
-          sudo docker context ls
-          
-          '''
-          
-        }
-      }
-      stage ('Push Image'){
-        steps {
-          withCredentials([string(credentialsId: $dockerhub_USR, variable: 'dockerhub_uname'),
-                           string(credentialsId: $dockerhub_PSW, variable: 'dockerhub_passwd')
-                           ]) {
-          sh '''#!/bin/bash
-          
-          sudo docker push kos44/kura_apps
+          docker context use default
+          docker context ls
+          echo ${sudo_jenkins} | sudo -S docker-compose build
           '''
           }
         }
       }
+      
+      stage ('Push Image'){
+        steps {
+          withCredentials([string(credentialsId: 'DOCKERHUB_UNAME', variable: 'dockerhub_uname'),
+                            string(credentialsId: 'DOCKERHUB_PASSWD', variable: 'dockerhub_passwd'),
+                               string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
+          sh '''#!/bin/bash
+          echo "Does it get to this step?"
+          # echo ${sudo_jenkins} | sudo -S docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
+          echo ${sudo_jenkins} | sudo -S docker push kingmant/ifmeorg
+          '''
+          }
+        }
+      }
+      
       stage ('Change Context'){
         steps {
           sh '''#!/bin/bash
-          sudo docker context use myecscontext
-          sudo docker context ls
+          docker context use myecscontext
+          docker context ls
           '''
         }
       }
+      
       stage('Docker Compose to ECS') {
         steps {
-          
+          withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
-          sudo docker compose up -d
+          echo ${sudo_jenkins} | sudo -S docker compose up -d
           '''
-          
+          }
         }
       }
+      
       stage('Clean up') {
         steps {
-         
+          withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
-          sudo docker context use default
-          sudo docker image rm kos44/kura_apps
+          docker context use default
+          echo ${sudo_jenkins} | sudo -S docker image rm kingmant/ifmeorg:latest
           '''
-          
+          }
         }
       }
     }
