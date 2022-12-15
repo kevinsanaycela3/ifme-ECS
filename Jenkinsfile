@@ -3,20 +3,23 @@ pipeline {
     stages {
       stage ('Build Image'){
         steps {
+          withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
           docker context use default
           docker context ls
-          sudo docker-compose build
+          echo "${sudo_jenkins}" | sudo -S docker-compose build
           '''
+          }
         }
       }
       stage ('Push Image'){
         steps {
           withCredentials([string(credentialsId: 'DOCKERHUB_UNAME', variable: 'dockerhub_uname'),
-                                    string(credentialsId: 'DOCKERHUB_PASSWD', variable: 'dockerhub_passwd')]) {
+                           string(credentialsId: 'DOCKERHUB_PASSWD', variable: 'dockerhub_passwd'),
+                           string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins']) {
           sh '''#!/bin/bash
-          sudo docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
-          sudo docker push kingmant/ifmeorg
+          echo "${sudo_jenkins}" | sudo -S docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
+          echo "${sudo_jenkins}" | sudo -S docker push kingmant/ifmeorg
           '''
           }
         }
@@ -31,17 +34,21 @@ pipeline {
       }
       stage('Docker Compose to ECS') {
         steps {
+          withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
-          sudo docker compose up -d
+          echo "${sudo_jenkins}" | sudo -S docker compose up -d
           '''
+          }
         }
       }
       stage('Clean up') {
         steps {
+          withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
           docker context use default
-          sudo docker image rm kingmant/ifmeorg:latest
+          echo "${sudo_jenkins}" | sudo -S docker image rm kingmant/ifmeorg:latest
           '''
+          }
         }
       }
     }
