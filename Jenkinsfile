@@ -4,9 +4,9 @@ pipeline {
       stage ('Build Image'){
         steps {
           sh '''#!/bin/bash
-          sudo docker context use default
-          sudo docker context ls
-          sudo docker-compose build
+          docker context use default
+          docker context ls
+          docker-compose build
           '''
         }
       }
@@ -15,8 +15,8 @@ pipeline {
           withCredentials([string(credentialsId: 'DOCKERHUB_UNAME', variable: 'dockerhub_uname'),
                                     string(credentialsId: 'DOCKERHUB_PASSWD', variable: 'dockerhub_passwd')]) {
           sh '''#!/bin/bash
-          sudo docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
-          sudo docker push kingmant/ifmeorg
+          docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
+          docker push kingmant/ifmeorg
           '''
           }
         }
@@ -24,23 +24,23 @@ pipeline {
       stage ('Change Context'){
         steps {
           sh '''#!/bin/bash
-          sudo docker context use myecscontext
-          sudo docker context ls
+          docker context use myecscontext
+          docker context ls
           '''
         }
       }
       stage('Docker Compose to ECS') {
         steps {
           sh '''#!/bin/bash
-          sudo docker compose up -d
+          docker compose up -d
           '''
         }
       }
       stage('Clean up') {
         steps {
           sh '''#!/bin/bash
-          sudo docker context use default
-          sudo docker image rm kingmant/ifmeorg:latest
+          docker context use default
+          docker image rm kingmant/ifmeorg:latest
           '''
         }
       }
