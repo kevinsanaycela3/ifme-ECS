@@ -18,6 +18,7 @@ pipeline {
           sudo docker login --username=${dockerhub_uname} --password=${dockerhub_passwd}
           sudo docker push kingmant/ifmeorg
           '''
+          }
         }
       }
       stage ('Change Context'){
