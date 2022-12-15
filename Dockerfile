@@ -34,7 +34,5 @@ RUN gem install bundler -v 2.1.4
 
 EXPOSE 3000
 
-RUN gem install bundler -v 2.1.4
-
 ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["bash"]
