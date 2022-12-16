@@ -7,7 +7,7 @@ pipeline {
       stage ('Build Image'){
         steps {
           sh '''#!/bin/bash
-          
+          export PATH=$PATH:/usr/local/bin
           docker context use default
           docker context ls
           docker-compose build
