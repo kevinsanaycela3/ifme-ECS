@@ -9,8 +9,8 @@ pipeline {
           withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
           echo $dockerhub_PSW | sudo docker login -u $dockerhub_USR --password-stdin
-          sudo docker context use default
-          sudo docker context ls
+          echo ${sudo_jenkins} | sudo -S docker context use default
+          echo ${sudo_jenkins} | sudo -S docker context ls
           echo ${sudo_jenkins} | sudo -S docker-compose build
           '''
           }
