@@ -6,13 +6,12 @@ pipeline {
     stages {
       stage ('Build Image'){
         steps {
-          withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
+          
           docker context use default
           docker context ls
           docker-compose build
           '''
-          }
         }
       }
       
