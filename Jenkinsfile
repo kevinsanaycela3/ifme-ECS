@@ -8,9 +8,9 @@ pipeline {
         steps {
           withCredentials([string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
-          sudo docker context use default
-          sudo docker context ls
-          sudo docker-compose build
+          docker context use default
+          docker context ls
+          docker-compose build
           '''
           }
         }
