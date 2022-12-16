@@ -18,9 +18,8 @@ pipeline {
       
       stage ('Push Image'){
         steps {
-          withCredentials([string(credentialsId: 'DOCKERHUB_USR', variable: 'dockerhub_uname'),
-                            string(credentialsId: 'DOCKERHUB_PSW', variable: 'dockerhub_passwd'),
-                               string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
+          withCredentials([
+                string(credentialsId: 'SUDO_JENKINS', variable: 'sudo_jenkins')]) {
           sh '''#!/bin/bash
           
           echo $dockerhub_PSW | sudo docker login -u $dockerhub_USR --password-stdin
